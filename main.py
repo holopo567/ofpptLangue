@@ -47,7 +47,8 @@ def click_element_with_mouse(xpath):
         print(f"Error clicking element with mouse: {e}")
 
 def login(email, password):
-    element = driver.find_element_by_xpath('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+    element = driver.find_element(By.XPATH, '//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+
     
     # استخدام JavaScript للنقر
     driver.execute_script("arguments[0].click();", element)
