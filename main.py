@@ -8,6 +8,9 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 import random
+import os
+
+
 
 
 
@@ -49,8 +52,9 @@ def login(email,password):
     click_element_with_mouse('//*[@id="idSIButton9"]')
     time.sleep(random.uniform(1, 3))
 
-
-login('2005090100281@ofppt-edu.ma','G3nT!xR7w$8qL9M')
+email = os.getenv('EMAIL')
+password = os.getenv('PASSWORD')
+login(email,password)
 driver.get("https://app.ofppt-langues.ma/platform/discover")
 click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
 click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
