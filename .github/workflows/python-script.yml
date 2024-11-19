@@ -25,4 +25,4 @@ jobs:
           pip install selenium undetected-chromedriver webdriver-manager
 
       - name: Run the script
-        run: python your_script.py  # استبدلي "your_script.py" باسم ملف السكربت الخاص بك
+        run: python main.py  # استبدلي "your_script.py" باسم ملف السكربت الخاص بك
