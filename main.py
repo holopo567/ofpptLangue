@@ -74,7 +74,7 @@ while True:
         time.sleep(70)  # الانتظار لمدة أطول لتقليد حركة الإنسان
         click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
     except Exception as e:
-            print(f"error: {e}"
+            print(f"error: {e}")
             break
 
 # إغلاق المتصفح
