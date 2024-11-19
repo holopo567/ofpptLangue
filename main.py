@@ -48,6 +48,14 @@ def click_element_with_mouse(xpath):
 
 def login(email, password):
     click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+    # الانتظار حتى تفتح النافذة الثانية (زيادة الوقت هنا)
+    WebDriverWait(driver, 30).until(lambda driver: len(driver.window_handles) > 1)
+    # التبديل إلى النافذة الثانية إذا كانت موجودة
+    if len(driver.window_handles) > 1:
+        driver.switch_to.window(driver.window_handles[1])
+    else:
+        print("لم يتم فتح نافذة جديدة.")
+        return
     send_key('//*[@id="i0116"]', email)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     send_key('//*[@id="i0118"]', password)
