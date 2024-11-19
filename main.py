@@ -47,24 +47,25 @@ def click_element_with_mouse(xpath):
         print(f"Error clicking element with mouse: {e}")
 
 def login(email, password):
-    click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+    element = driver.find_element_by_xpath('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
     
-    # الانتظار حتى تفتح النافذة الثانية مع زيادة وقت الانتظار
+    # استخدام JavaScript للنقر
+    driver.execute_script("arguments[0].click();", element)
+    
+    # الانتظار للتأكد من فتح نافذة جديدة
+    time.sleep(5)
+    
+    # التأكد من أن النافذة الجديدة قد فتحت
     WebDriverWait(driver, 60).until(lambda driver: len(driver.window_handles) > 1)
     
-    # التأكد من وجود نافذة جديدة قبل التبديل إليها
-    if len(driver.window_handles) > 1:
-        driver.switch_to.window(driver.window_handles[1])
-    else:
-        print("لم يتم فتح نافذة جديدة بعد النقر.")
-        return
+    # التبديل إلى النافذة الجديدة
+    driver.switch_to.window(driver.window_handles[1])
     
     send_key('//*[@id="i0116"]', email)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     send_key('//*[@id="i0118"]', password)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     click_element_with_mouse('//*[@id="idSIButton9"]')
-    time.sleep(random.uniform(1, 3))
 
 
 
