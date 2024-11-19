@@ -45,21 +45,23 @@ def click_element_with_mouse(xpath):
     except Exception as e:
         print(f"Error clicking element with mouse: {e}")
 
-def login(email,password):
+def login(email, password):
     click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+    # الانتظار حتى تفتح النافذة الثانية
+    WebDriverWait(driver, 10).until(lambda driver: len(driver.window_handles) > 1)
+    # التبديل إلى النافذة الثانية
     driver.switch_to.window(driver.window_handles[1])
-    send_key('//*[@id="i0116"]',email)
+    send_key('//*[@id="i0116"]', email)
     click_element_with_mouse('//*[@id="idSIButton9"]')
-    send_key('//*[@id="i0118"]',password)
+    send_key('//*[@id="i0118"]', password)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     click_element_with_mouse('//*[@id="idSIButton9"]')
     time.sleep(random.uniform(1, 3))
 
+
 email = os.getenv('EMAIL')
 password = os.getenv('PASSWORD')
-print(email)
-print(password)
-login('2005090100281@ofppt-edu.ma','G3nT!xR7w$8qL9M')
+login(email,password)
 driver.get("https://app.ofppt-langues.ma/platform/discover")
 click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
 click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
