@@ -47,7 +47,7 @@ def click_element_with_mouse(xpath):
         print(f"Error clicking element with mouse: {e}")
 
 def login(email, password):
-        click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+    click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
 
     
     # الانتظار للتأكد من فتح نافذة جديدة
