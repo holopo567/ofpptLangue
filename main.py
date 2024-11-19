@@ -36,8 +36,9 @@ def send_key(xpath,key):
 
 def click_element_with_mouse(xpath):
     try:
+        # تأكد من أن العنصر جاهز للنقر عليه
         element = WebDriverWait(driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, xpath))
+            EC.element_to_be_clickable((By.XPATH, xpath))
         )
         actions = ActionChains(driver)
         actions.move_to_element(element).click().perform()  # تحريك الماوس ثم النقر
@@ -58,18 +59,23 @@ def login(email, password):
 email = os.getenv('EMAIL')
 password = os.getenv('PASSWORD')
 login(email,password)
+print(len(driver.window_handles))
 driver.get("https://app.ofppt-langues.ma/platform/discover")
 click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
 click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
 
 # تكرار العملية
 while True:
-    time.sleep(random.uniform(1, 3))  # النوم لوقت عشوائي
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
-    time.sleep(random.uniform(1, 3))  # النوم لوقت عشوائي
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div/div[1]/div/div/button')
-    time.sleep(70)  # الانتظار لمدة أطول لتقليد حركة الإنسان
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
+    try:
+        time.sleep(random.uniform(1, 3))  # النوم لوقت عشوائي
+        click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
+        time.sleep(random.uniform(1, 3))  # النوم لوقت عشوائي
+        click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div/div[1]/div/div/button')
+        time.sleep(70)  # الانتظار لمدة أطول لتقليد حركة الإنسان
+        click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
+    except Exception as e:
+            print(f"error: {e}"
+            break
 
 # إغلاق المتصفح
 driver.quit()
