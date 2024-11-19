@@ -16,7 +16,7 @@ import os
 
 user_data_dir = r"C:\\Users\\moham\\AppData\\Local\\Microsoft\\Edge\\User Data"
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # تشغيل بدون واجهة رسومية
+#options.add_argument("--headless")  # تشغيل بدون واجهة رسومية
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 
@@ -47,12 +47,8 @@ def click_element_with_mouse(xpath):
         print(f"Error clicking element with mouse: {e}")
 
 def login(email, password):
-    element = WebDriverWait(driver, 30).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]'))
-        )
-    
-    # استخدام JavaScript للنقر
-    driver.execute_script("arguments[0].click();", element)
+        click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
+
     
     # الانتظار للتأكد من فتح نافذة جديدة
     time.sleep(5)
