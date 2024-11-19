@@ -48,20 +48,24 @@ def click_element_with_mouse(xpath):
 
 def login(email, password):
     click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
-    # الانتظار حتى تفتح النافذة الثانية (زيادة الوقت هنا)
-    WebDriverWait(driver, 30).until(lambda driver: len(driver.window_handles) > 1)
-    # التبديل إلى النافذة الثانية إذا كانت موجودة
+    
+    # الانتظار حتى تفتح النافذة الثانية مع زيادة وقت الانتظار
+    WebDriverWait(driver, 60).until(lambda driver: len(driver.window_handles) > 1)
+    
+    # التأكد من وجود نافذة جديدة قبل التبديل إليها
     if len(driver.window_handles) > 1:
         driver.switch_to.window(driver.window_handles[1])
     else:
-        print("لم يتم فتح نافذة جديدة.")
+        print("لم يتم فتح نافذة جديدة بعد النقر.")
         return
+    
     send_key('//*[@id="i0116"]', email)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     send_key('//*[@id="i0118"]', password)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     click_element_with_mouse('//*[@id="idSIButton9"]')
     time.sleep(random.uniform(1, 3))
+
 
 
 email = os.getenv('EMAIL')
