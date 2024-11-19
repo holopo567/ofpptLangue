@@ -22,7 +22,7 @@ options.add_argument("--disable-dev-shm-usage")
 
 
 driver = uc.Chrome(options=options)
-driver.get("https://app.ofppt-langues.ma/platform/discover")
+driver.get("https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/")
 
 def send_key(xpath,key):
     try:
@@ -47,18 +47,6 @@ def click_element_with_mouse(xpath):
         print(f"Error clicking element with mouse: {e}")
 
 def login(email, password):
-    click_element_with_mouse('//*[@id="__next"]/main/section[1]/div/div[2]/div/div[3]/a[1]')
-
-    
-    # الانتظار للتأكد من فتح نافذة جديدة
-    time.sleep(5)
-    
-    # التأكد من أن النافذة الجديدة قد فتحت
-    WebDriverWait(driver, 60).until(lambda driver: len(driver.window_handles) > 1)
-    
-    # التبديل إلى النافذة الجديدة
-    driver.switch_to.window(driver.window_handles[1])
-    
     send_key('//*[@id="i0116"]', email)
     click_element_with_mouse('//*[@id="idSIButton9"]')
     send_key('//*[@id="i0118"]', password)
