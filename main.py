@@ -16,7 +16,7 @@ import os
 
 user_data_dir = r"C:\\Users\\moham\\AppData\\Local\\Microsoft\\Edge\\User Data"
 options = webdriver.ChromeOptions()
-#options.add_argument("--headless")  # تشغيل بدون واجهة رسومية
+options.add_argument("--headless")  # تشغيل بدون واجهة رسومية
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 
