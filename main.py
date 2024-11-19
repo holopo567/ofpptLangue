@@ -57,7 +57,9 @@ def login(email,password):
 
 email = os.getenv('EMAIL')
 password = os.getenv('PASSWORD')
-login(email,password)
+print(email)
+print(password)
+login('2005090100281@ofppt-edu.ma','G3nT!xR7w$8qL9M')
 driver.get("https://app.ofppt-langues.ma/platform/discover")
 click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
 click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
