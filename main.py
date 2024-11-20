@@ -62,12 +62,14 @@ def login(email,password):
 login('2005090100281@ofppt-edu.ma','G3nT!xR7w$8qL9M')
 
 driver.get("https://app.ofppt-langues.ma/platform/discover")
-print("lein mcha")
 click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
 click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
 
 # تكرار العملية
 while True:
+    driver.get("https://app.ofppt-langues.ma/platform/discover?studyLg=fr_FR")
+    click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
+    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
     time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي
     click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
     time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي
