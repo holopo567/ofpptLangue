@@ -12,7 +12,7 @@ import random
 # إعدادات السائق
 def setup_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless=new")
+    #options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--no-sandbox")
@@ -34,7 +34,7 @@ def login(driver, email, password):
         send_key(driver, '//*[@id="i0118"]', password)
         click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
         click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
-        time.sleep(15)
+        
     except Exception as e:
         print(f"Error in login: {e}")
 
@@ -73,7 +73,8 @@ def click_element_with_css_selector(driver, css_selector):
 # وظيفة لتجاوز الفيديو
 def skip_video(driver):
     try:
-        video = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "video")))
+        video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
+        time.sleep(random.uniform(2, 5))
         video_duration = driver.execute_script("return arguments[0].duration;", video)
         start_time = video_duration - 3
         driver.execute_script(f"arguments[0].currentTime = {start_time};", video)
@@ -82,28 +83,41 @@ def skip_video(driver):
         print(f"Error in skip_video: {e}")
 
 
-# وظيفة للحصول على جميع العناصر داخل عنصر معين
-def get_all_elements(driver, xpath):
+def get_all_elements(driver, Selector):
     try:
-        container = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
-        elements = container.find_elements(By.CSS_SELECTOR, "*")
-        selectors = []
+        # انتظار ظهور العنصر الأساسي
+        container = WebDriverWait(driver, 30).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, Selector))
+        )
+        # الحصول على جميع العناصر داخل العنصر الأساسي
+        elements = container.find_elements(By.XPATH, "*")
+        new_elements=[]
         for element in elements:
-            try:
-                selector = driver.execute_script("""
-                    const el = arguments[0];
-                    const tag = el.tagName.toLowerCase();
-                    const id = el.id ? '#' + el.id : '';
-                    const classes = el.className && typeof el.className === 'string' ? '.' + el.className.replace(/ /g, '.') : '';
-                    return tag + id + classes;
-                """, element)
-                selectors.append(selector)
-            except Exception as inner_error:
-                print(f"Error generating selector: {inner_error}")
+            CenvertSelector = driver.execute_script("""
+                            const el = arguments[0];
+                            const tag = el.tagName.toLowerCase();
+                            const id = el.id ? '#' + el.id : '';
+                            const classes = el.className && typeof el.className === 'string' ? '.' + el.className.replace(/ /g, '.') : '';
+                            return tag + id + classes;
+                        """, element)
+            new_elements.append(CenvertSelector)
+
+
+        selectors=[]
+        for i in range(1,(len(new_elements)+1)):
+            selector=f'#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div.c-gAkLYW > a:nth-child({i})'
+            selectors.append(selector)
         return selectors
+
+
+     
     except Exception as e:
-        print(f"Error in get_all_elements: {e}")
-        return []
+        print('eroor in get_all_elements: ',e)
+
+
+
+
+
 
 
 # الوظيفة الرئيسية
@@ -111,24 +125,43 @@ def main():
     driver = setup_driver()
     try:
         login(driver, "2005090100281@ofppt-edu.ma", "G3nT!xR7w$8qL9M")
-        lessons = ['//*[@id="VOCABULARY"]/ul/li[2]/a']
+        time.sleep(15)
+        lessons=[]
+        for i in range(1,19):
+            lesson=f'#VOCABULARY > ul > li:nth-child({i})'
+            lessons.append(lesson)
+        
         
         while True:
+            driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
+            time.sleep(10)
             driver.get("https://app.ofppt-langues.ma/platform/discover")
-            
-            for lesson_xpath in lessons:
+            time.sleep(3)
+            # تحقق من أن الرابط الحالي هو الرابط المطلوب
+            if driver.current_url == "https://app.ofppt-langues.ma/platform/discover":
+                print("we got the page !")
+            else:
+                print(f"the current page is: {driver.current_url}")
+                continue
+
+
+            for lesson in lessons:
                 n=0
-                click_element_with_mouse(driver, lesson_xpath)
+                click_element_with_css_selector(driver, lesson)
 
                 # التعامل مع الدروس
-                tip_selectors = get_all_elements(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/div[1]')
+                tip_selectors = get_all_elements(driver, '#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div')
                 for tip in tip_selectors:
                     click_element_with_css_selector(driver, tip)
+                    click_element_with_css_selector(driver, '#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1)')
                     skip_video(driver)
-                    click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
                     click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
+                    click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(2)')
                     n+=1
                     print(n)
+                    if tip==tip_selectors[-1]:
+                        click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
+                        print('done!')
     except Exception as e:
         print(f"Error in main loop: {e}")
     finally:
