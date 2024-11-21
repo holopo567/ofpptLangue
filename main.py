@@ -4,79 +4,137 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 import random
 
 
+# إعدادات السائق
+def setup_driver():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless=new")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--mute-audio")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument(
+        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.199 Safari/537.36"
+    )
+    driver = uc.Chrome(options=options)
+    return driver
 
-user_data_dir = r"C:\\Users\\moham\\AppData\\Local\\Microsoft\\Edge\\User Data"
-options = webdriver.ChromeOptions()
-options.add_argument("--headless=new")
-options.add_argument("--disable-gpu")
-options.add_argument("--window-size=1920,1080")  # حجم الشاشة الافتراضي
-options.add_argument("--no-sandbox")
-options.add_argument("--mute-audio")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.199 Safari/537.36")
 
-
-driver = uc.Chrome(options=options)
-driver.get("https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/")
-
-def send_key(xpath,key):
+# وظيفة لتسجيل الدخول
+def login(driver, email, password):
     try:
-        element = WebDriverWait(driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, xpath))
-        )
+        driver.get("https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/")
+        send_key(driver, '//*[@id="i0116"]', email)
+        click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
+        send_key(driver, '//*[@id="i0118"]', password)
+        click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
+        click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
+        time.sleep(15)
+    except Exception as e:
+        print(f"Error in login: {e}")
+
+
+# وظيفة لإرسال مفتاح
+def send_key(driver, xpath, key):
+    try:
+        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
         element.send_keys(key)
-        
     except Exception as e:
-        print(f"Error clicking element with mouse: {e}")
+        print(f"Error in send_key: {e}")
 
-def click_element_with_mouse(xpath):
+
+# وظيفة للنقر
+def click_element_with_mouse(driver, xpath):
     try:
-        element = WebDriverWait(driver, 60).until(
-            EC.presence_of_element_located((By.XPATH, xpath))
-        )
+        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
         actions = ActionChains(driver)
-        actions.move_to_element(element).click().perform()  # تحريك الماوس ثم النقر
-        time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي بعد النقر
+        actions.move_to_element(element).click().perform()
+        time.sleep(random.uniform(2, 5))
     except Exception as e:
-        print(f"Error clicking element with mouse: {e}")
-
-def login(email,password):
-    
-    send_key('//*[@id="i0116"]',email)
-    time.sleep(random.uniform(5, 8))
-    click_element_with_mouse('//*[@id="idSIButton9"]')
-    send_key('//*[@id="i0118"]',password)
-    time.sleep(random.uniform(5, 8))
-    click_element_with_mouse('//*[@id="idSIButton9"]')
-    click_element_with_mouse('//*[@id="idSIButton9"]')
-    time.sleep(random.uniform(10, 20))
- 
+        print(f"Error in click_element_with_mouse: {e}")
 
 
-login('2005090100281@ofppt-edu.ma','G3nT!xR7w$8qL9M')
+def click_element_with_css_selector(driver, css_selector):
+    try:
+        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
+        actions = ActionChains(driver)
+        actions.move_to_element(element).click().perform()
+        time.sleep(random.uniform(2, 5))  # تأخير عشوائي لمحاكاة السلوك البشري
+    except Exception as e:
+        print(f"Error in click_element_with_css_selector: {e}")
 
-driver.get("https://app.ofppt-langues.ma/platform/discover")
-click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
-click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
 
-# تكرار العملية
-while True:
-    driver.get("https://app.ofppt-langues.ma/platform/discover?studyLg=fr_FR")
-    click_element_with_mouse('//*[@id="VOCABULARY"]/ul/li[1]/a')
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
-    time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
-    time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div/div[1]/div/div/button')
-    time.sleep(70)  # الانتظار لمدة أطول لتقليد حركة الإنسان
-    click_element_with_mouse('//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
-    
 
-# إغلاق المتصفح
-driver.quit()
+# وظيفة لتجاوز الفيديو
+def skip_video(driver):
+    try:
+        video = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.TAG_NAME, "video")))
+        video_duration = driver.execute_script("return arguments[0].duration;", video)
+        start_time = video_duration - 3
+        driver.execute_script(f"arguments[0].currentTime = {start_time};", video)
+        driver.execute_script("arguments[0].play();", video)
+    except Exception as e:
+        print(f"Error in skip_video: {e}")
+
+
+# وظيفة للحصول على جميع العناصر داخل عنصر معين
+def get_all_elements(driver, xpath):
+    try:
+        container = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        elements = container.find_elements(By.CSS_SELECTOR, "*")
+        selectors = []
+        for element in elements:
+            try:
+                selector = driver.execute_script("""
+                    const el = arguments[0];
+                    const tag = el.tagName.toLowerCase();
+                    const id = el.id ? '#' + el.id : '';
+                    const classes = el.className && typeof el.className === 'string' ? '.' + el.className.replace(/ /g, '.') : '';
+                    return tag + id + classes;
+                """, element)
+                selectors.append(selector)
+            except Exception as inner_error:
+                print(f"Error generating selector: {inner_error}")
+        return selectors
+    except Exception as e:
+        print(f"Error in get_all_elements: {e}")
+        return []
+
+
+# الوظيفة الرئيسية
+def main():
+    driver = setup_driver()
+    try:
+        login(driver, "2005090100281@ofppt-edu.ma", "G3nT!xR7w$8qL9M")
+        lessons = ['//*[@id="VOCABULARY"]/ul/li[2]/a']
+        
+        while True:
+            driver.get("https://app.ofppt-langues.ma/platform/discover")
+            
+            for lesson_xpath in lessons:
+                n=0
+                click_element_with_mouse(driver, lesson_xpath)
+
+                # التعامل مع الدروس
+                tip_selectors = get_all_elements(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/div[1]')
+                for tip in tip_selectors:
+                    click_element_with_css_selector(driver, tip)
+                    skip_video(driver)
+                    click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
+                    click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
+                    n+=1
+                    print(n)
+    except Exception as e:
+        print(f"Error in main loop: {e}")
+    finally:
+        driver.quit()
+
+
+# بدء التنفيذ
+if __name__ == "__main__":
+    main()
