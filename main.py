@@ -27,7 +27,7 @@ def setup_driver():
 
 # وظيفة لتسجيل الدخول
 def login(driver, email, password):
-    try:
+    
         driver.get("https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/")
         send_key(driver, '//*[@id="i0116"]', email)
         click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
@@ -35,73 +35,67 @@ def login(driver, email, password):
         click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
         click_element_with_mouse(driver, '//*[@id="idSIButton9"]')
         
-    except Exception as e:
-        print(f"Error in login: {e}")
+    
+        
 
 
 # وظيفة لإرسال مفتاح
 def send_key(driver, xpath, key):
-    try:
+    
         element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
         element.send_keys(key)
-    except Exception as e:
-        print(f"Error in send_key: {e}")
+    
+      
 
 
 # وظيفة للنقر
 def click_element_with_mouse(driver, xpath):
-    try:
+    
         element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
         actions = ActionChains(driver)
         actions.move_to_element(element)
         time.sleep(random.uniform(2, 5))
         actions.click().perform()
         time.sleep(random.uniform(2, 5))
-    except Exception as e:
-        print(f"Error in click_element_with_mouse: {e}")
 
 
 def click_element_with_css_selector(driver, css_selector):
-    try:
+    
         element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
         actions = ActionChains(driver)
         actions.move_to_element(element)
         time.sleep(random.uniform(2, 5))
         actions.click().perform()
         time.sleep(random.uniform(2, 5))  # تأخير عشوائي لمحاكاة السلوك البشري
-    except Exception as e:
-        print(f"Error in click_element_with_css_selector: {e}")
+    
 
 
 
 # وظيفة لتجاوز الفيديو
 def skip_video(driver):
-    try:
+    
         video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
         time.sleep(random.uniform(2, 5))
         video_duration = driver.execute_script("return arguments[0].duration;", video)
         start_time = video_duration - 3
         driver.execute_script(f"arguments[0].currentTime = {start_time};", video)
         driver.execute_script("arguments[0].play();", video)
-    except Exception as e:
-        print(f"Error in skip_video: {e}")
+    
 
 def wait_video(driver):
-    try:
+    
         video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
         time.sleep(random.uniform(2, 5))
         video_duration = driver.execute_script("return arguments[0].duration;", video)
         driver.execute_script("arguments[0].play();", video)
         time.sleep(video_duration+1)
-    except Exception as e:
-        print(f"Error in skip_video: {e}")
 
 
     
 
 
 def get_all_elements(driver, Selector):
-    try:
+    
         # انتظار ظهور العنصر الأساسي
         container = WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, Selector))
@@ -127,9 +121,7 @@ def get_all_elements(driver, Selector):
         return selectors
 
 
-     
-    except Exception as e:
-        print('eroor in get_all_elements: ',e)
+    
 
 
 
@@ -150,35 +142,39 @@ def main():
         
         
         while True:
-            driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
-            time.sleep(10)
-            driver.get("https://app.ofppt-langues.ma/platform/discover")
-            time.sleep(3)
-            # تحقق من أن الرابط الحالي هو الرابط المطلوب
-            if driver.current_url == "https://app.ofppt-langues.ma/platform/discover":
-                print("we got the page !")
-            else:
-                print(f"the current page is: {driver.current_url}")
-                continue
+            try:
+                driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
+                time.sleep(10)
+                driver.get("https://app.ofppt-langues.ma/platform/discover")
+                time.sleep(3)
+                # تحقق من أن الرابط الحالي هو الرابط المطلوب
+                if driver.current_url == "https://app.ofppt-langues.ma/platform/discover":
+                    print("we got the page !")
+                else:
+                    print(f"the current page is: {driver.current_url}")
+                    continue
 
 
-            for lesson in lessons:
-                n=0
-                click_element_with_css_selector(driver, lesson)
+                for lesson in lessons:
+                    n=0
+                    click_element_with_css_selector(driver, lesson)
 
-                # التعامل مع الدروس
-                tip_selectors = get_all_elements(driver, '#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div')
-                for tip in tip_selectors:
-                    click_element_with_css_selector(driver, tip)
-                    click_element_with_css_selector(driver, '#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1)')
-                    wait_video(driver)
-                    click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
-                    click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(2)')
-                    n+=1
-                    print(n)
-                    if tip==tip_selectors[-1]:
-                        click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
-                        print('done!')
+                    # التعامل مع الدروس
+                    tip_selectors = get_all_elements(driver, '#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div')
+                    for tip in tip_selectors:
+                        click_element_with_css_selector(driver, tip)
+                        click_element_with_css_selector(driver, '#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1)')
+                        skip_video(driver)
+                        click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
+                        click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(2)')
+                        n+=1
+                        print(n)
+                        if tip==tip_selectors[-1]:
+                            click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
+                            print('done!')
+            except Exception as e :
+                 print(f'while Error: {e}')
+                 continue                
     except Exception as e:
         print(f"Error in main loop: {e}")
     finally:
