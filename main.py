@@ -51,9 +51,11 @@ def send_key(driver, xpath, key):
 # وظيفة للنقر
 def click_element_with_mouse(driver, xpath):
     try:
-        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
+        element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
         actions = ActionChains(driver)
-        actions.move_to_element(element).click().perform()
+        actions.move_to_element(element)
+        time.sleep(random.uniform(2, 5))
+        actions.click().perform()
         time.sleep(random.uniform(2, 5))
     except Exception as e:
         print(f"Error in click_element_with_mouse: {e}")
@@ -61,9 +63,11 @@ def click_element_with_mouse(driver, xpath):
 
 def click_element_with_css_selector(driver, css_selector):
     try:
-        element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
+        element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
         actions = ActionChains(driver)
-        actions.move_to_element(element).click().perform()
+        actions.move_to_element(element)
+        time.sleep(random.uniform(2, 5))
+        actions.click().perform()
         time.sleep(random.uniform(2, 5))  # تأخير عشوائي لمحاكاة السلوك البشري
     except Exception as e:
         print(f"Error in click_element_with_css_selector: {e}")
