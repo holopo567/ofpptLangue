@@ -95,14 +95,7 @@ def wait_video(driver):
         driver.execute_script("arguments[0].play();", video)
         time.sleep(video_duration+1)
     except Exception as e:
-        try:
-            video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
-            time.sleep(random.uniform(2, 5))
-            video_duration = driver.execute_script("return arguments[0].duration;", video)
-            driver.execute_script("arguments[0].play();", video)
-            time.sleep(video_duration+1)
-        except Exception as e:
-            print(f'error: {e}')
+        print(f"Error in skip_video: {e}")
 
 
     
@@ -156,7 +149,7 @@ def main():
             lesson=f'#VOCABULARY > ul > li:nth-child({i})'
             lessons.append(lesson)'''
         
-        
+        n=0
         while True:
             
             time.sleep(3)
@@ -166,27 +159,20 @@ def main():
                 time.sleep(10)
                 driver.get("https://app.ofppt-langues.ma/platform/discover")
                 print('we got the page!')
+            click_element_with_mouse(driver,'//*[@id="VOCABULARY"]/ul/li[1]/a')
+            click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
+            while True:
+                
+                
+                click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
+                time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي
+                click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/div/div[1]/div/div/button')
+                time.sleep(70)  # الانتظار لمدة أطول لتقليد حركة الإنسان
+                click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')   
+                n+=1
+                print(n) 
+
             
-                
-
-            n=0
-            for lesson in lessons:
-                
-                click_element_with_css_selector(driver, lesson)
-
-                # التعامل مع الدروس
-                tip_selectors = get_all_elements(driver, '#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div')
-                for tip in tip_selectors:
-                    click_element_with_css_selector(driver, tip)
-                    click_element_with_css_selector(driver, '#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1)')
-                    wait_video(driver)
-                    click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
-                    click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(2)')
-                    n+=1
-                    print(n)
-                    if tip==tip_selectors[-1]:
-                        click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
-                        print('done!')
     except Exception as e:
         print(f"Error in main loop: {e}")
     finally:
