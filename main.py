@@ -95,7 +95,14 @@ def wait_video(driver):
         driver.execute_script("arguments[0].play();", video)
         time.sleep(video_duration+1)
     except Exception as e:
-        print(f"Error in skip_video: {e}")
+        try:
+            video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
+            time.sleep(random.uniform(2, 5))
+            video_duration = driver.execute_script("return arguments[0].duration;", video)
+            driver.execute_script("arguments[0].play();", video)
+            time.sleep(video_duration+1)
+        except Exception as e:
+            print(f'error: {e}')
 
 
     
@@ -172,7 +179,7 @@ def main():
                 for tip in tip_selectors:
                     click_element_with_css_selector(driver, tip)
                     click_element_with_css_selector(driver, '#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1)')
-                    skip_video(driver)
+                    wait_video(driver)
                     click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
                     click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(2)')
                     n+=1
