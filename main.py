@@ -12,7 +12,7 @@ import random
 # إعدادات السائق
 def setup_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless=new")
+    #options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--no-sandbox")
@@ -144,35 +144,47 @@ def main():
     try:
         login(driver, "2005090100281@ofppt-edu.ma", "G3nT!xR7w$8qL9M")
         time.sleep(15)
-        lessons=['#VOCABULARY > ul > li:nth-child(1)']
-        '''for i in range(1,19):
+        lessons=[]
+        for i in range(1,19):
             lesson=f'#VOCABULARY > ul > li:nth-child({i})'
-            lessons.append(lesson)'''
+            lessons.append(lesson)
         
-        n=0
+        start_time = time.time()
+        max_duration = 3600
         while True:
-            
+            driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
+            time.sleep(10)
+            driver.get("https://app.ofppt-langues.ma/platform/discover")
             time.sleep(3)
             # تحقق من أن الرابط الحالي هو الرابط المطلوب
-            if driver.current_url != "https://app.ofppt-langues.ma/platform/discover":
-                driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
-                time.sleep(10)
-                driver.get("https://app.ofppt-langues.ma/platform/discover")
-                print('we got the page!')
-            click_element_with_mouse(driver,'//*[@id="VOCABULARY"]/ul/li[1]/a')
-            click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/div[2]/div/a[2]/div')
-            while True:
-                
-                
-                click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/ul[2]/li[1]/a/div')
-                time.sleep(random.uniform(5, 8))  # النوم لوقت عشوائي
-                click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/div/div[1]/div/div/button')
-                time.sleep(70)  # الانتظار لمدة أطول لتقليد حركة الإنسان
-                click_element_with_mouse(driver,'//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')   
-                n+=1
-                print(n) 
+            if driver.current_url == "https://app.ofppt-langues.ma/platform/discover":
+                print("we got the page !")
+            else:
+                print(f"the current page is: {driver.current_url}")
+                continue
 
-            
+
+            for lesson in lessons:
+                n=0
+                click_element_with_css_selector(driver, lesson)
+
+                # التعامل مع الدروس
+                tip_selectors = get_all_elements(driver, '#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div')
+                for tip in tip_selectors:
+                    click_element_with_css_selector(driver, tip)
+                    click_element_with_css_selector(driver, '#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1)')
+                    wait_video(driver)
+                    click_element_with_mouse(driver, '//*[@id="theme-provider"]/div[1]/main/div/div[2]/a')
+                    click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(2)')
+                    n+=1
+                    print(n)
+                    if tip==tip_selectors[-1]:
+                        click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
+                        print('done!')
+                        
+                if time.time() - start_time > max_duration:
+                    print("Stopped after 1 hour.")
+                    break
     except Exception as e:
         print(f"Error in main loop: {e}")
     finally:
