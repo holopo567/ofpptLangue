@@ -136,7 +136,7 @@ def main():
         login(driver, "2005090100281@ofppt-edu.ma", "G3nT!xR7w$8qL9M")
         time.sleep(15)
         lessons=[]
-        for i in range(1,19):
+        for i in range(1,3):
             lesson=f'#VOCABULARY > ul > li:nth-child({i})'
             lessons.append(lesson)
         
