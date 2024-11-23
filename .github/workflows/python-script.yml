@@ -1,10 +1,13 @@
 name: Run OFPPT Script
 
 on:
-  workflow_dispatch:  # تشغيل الأكشن يدويًا عند الحاجة
-  push:
-    branches:
-      - main  # تشغيل الأكشن عند تحديث فرع main
+  schedule:
+    - cron: '0 * * * *'  # تشغيل الأكشن كل ساعة
+  workflow_dispatch:  # السماح بالتشغيل اليدوي عند الحاجة
+
+concurrency:
+  group: ofppt-script  # منع تشغيل الأكشن مرتين في نفس الوقت
+  cancel-in-progress: true  # إلغاء العملية الجارية إذا بدأت جديدة
 
 jobs:
   run_script:
@@ -18,9 +21,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'  # اختيار إصدار Python
-        
+
       - name: Install Chrome
-        run: sudo apt-get install google-chrome-stable
+        run: sudo apt-get install -y google-chrome-stable
 
       - name: Install dependencies
         run: |
@@ -28,4 +31,4 @@ jobs:
           pip install selenium undetected-chromedriver webdriver-manager
 
       - name: Run the script
-        run: python main.py  # استبدلي "your_script.py" باسم ملف السكربت الخاص بك
+        run: python main.py  # تشغيل السكربت
