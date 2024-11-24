@@ -76,16 +76,8 @@ def click_element_with_css_selector(driver, css_selector):
 
 
 # وظيفة لتجاوز الفيديو
-def skip_video(driver):
-    try:
-        video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
-        time.sleep(random.uniform(2, 5))
-        video_duration = driver.execute_script("return arguments[0].duration;", video)
-        start_time = video_duration - 3
-        driver.execute_script(f"arguments[0].currentTime = {start_time};", video)
-        driver.execute_script("arguments[0].play();", video)
-    except Exception as e:
-        print(f"Error in skip_video: {e}")
+
+       
 
 def wait_video(driver):
     try:
