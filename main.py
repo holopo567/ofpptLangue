@@ -144,6 +144,9 @@ def main():
         start_time = time.time()
         max_duration = 3600
         while True:
+            if time.time() - start_time > max_duration:
+                print("Stopped after 1 hour.")
+                break
             driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
             time.sleep(10)
             driver.get("https://app.ofppt-langues.ma/platform/discover")
