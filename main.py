@@ -76,8 +76,16 @@ def click_element_with_css_selector(driver, css_selector):
 
 
 # وظيفة لتجاوز الفيديو
-
-       
+def skip_video(driver):
+    try:
+        video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
+        time.sleep(random.uniform(2, 5))
+        video_duration = driver.execute_script("return arguments[0].duration;", video)
+        start_time = video_duration - 3
+        driver.execute_script(f"arguments[0].currentTime = {start_time};", video)
+        driver.execute_script("arguments[0].play();", video)
+    except Exception as e:
+        print(f"Error in skip_video: {e}")
 
 def wait_video(driver):
     try:
@@ -141,12 +149,8 @@ def main():
             lesson=f'#VOCABULARY > ul > li:nth-child({i})'
             lessons.append(lesson)
         
-        start_time = time.time()
-        max_duration = 3600
+        
         while True:
-            if time.time() - start_time > max_duration:
-                print("Stopped after 1 hour.")
-                break
             driver.get('https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/')
             time.sleep(10)
             driver.get("https://app.ofppt-langues.ma/platform/discover")
@@ -176,8 +180,6 @@ def main():
                     if tip==tip_selectors[-1]:
                         click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
                         print('done!')
-                        
-                
     except Exception as e:
         print(f"Error in main loop: {e}")
     finally:
