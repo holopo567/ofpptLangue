@@ -2,7 +2,7 @@ name: Run OFPPT Script
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # تشغيل الأكشن كل ساعة
+    - cron: '0 */1 * * *'  # تشغيل الأكشن كل ساعة
   workflow_dispatch:  # السماح بالتشغيل اليدوي عند الحاجة
 
 concurrency:
