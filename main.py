@@ -177,9 +177,7 @@ def main():
                         click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
                         print('done!')
                         
-                if time.time() - start_time > max_duration:
-                    print("Stopped after 1 hour.")
-                    break
+                
     except Exception as e:
         print(f"Error in main loop: {e}")
     finally:
