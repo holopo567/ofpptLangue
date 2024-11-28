@@ -1,13 +1,13 @@
 name: Run OFPPT Script
 
 on:
-  schedule:
-    - cron: '0 */1 * * *'  # تشغيل الأكشن كل ساعة
+  #schedule:
+    #- cron: '0 */1 * * *'  # تشغيل الأكشن كل ساعة
   workflow_dispatch:  # السماح بالتشغيل اليدوي عند الحاجة
 
-concurrency:
-  group: ofppt-script  # منع تشغيل الأكشن مرتين في نفس الوقت
-  cancel-in-progress: true  # إلغاء العملية الجارية إذا بدأت جديدة
+#concurrency:
+ # group: ofppt-script  # منع تشغيل الأكشن مرتين في نفس الوقت
+  #cancel-in-progress: true  # إلغاء العملية الجارية إذا بدأت جديدة
 
 jobs:
   run_script:
