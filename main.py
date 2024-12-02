@@ -12,7 +12,7 @@ import random
 # إعدادات السائق
 def setup_driver():
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless=new")
+    #options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--no-sandbox")
@@ -77,31 +77,7 @@ def click_element_with_css_selector(driver, css_selector):
         
 
 
-
-# وظيفة لتجاوز الفيديو
-
-       
-
-def wait_video(driver):
-    global  current_time
-    try:
-        video =  WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > div.plyr__video-wrapper > video')))
-        time.sleep(random.uniform(2, 5))
-        video_duration = driver.execute_script("return arguments[0].duration;", video)
-        driver.execute_script("arguments[0].play();", video)
-        time.sleep(video_duration+1)
-    except Exception as e:
-        print("Current Time:",  time.strftime("%H:%M:%S", time.localtime()))
-        print(f"Error in wait_video: {e}")
-        
-
-
     
-
-
-
-
-
 
 
 
@@ -135,7 +111,7 @@ def main():
             click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > div:nth-child(3) > div > a:nth-child(1) > div')  
             click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dYOPMy > li:nth-child(1) > a > div')
             click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > div > div.c-bQzyIt.c-bQzyIt-kqOPqT-alignContent-start.c-bQzyIt-ddIBXx-gap-4 > div > div > button')
-            wait_video(driver)
+            time.sleep(70)
             click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > div.c-UazGY.c-UazGY-hySSfO-gap-12')
             click_element_with_css_selector(driver,'#theme-provider > div.c-bUvWKu > main > div > ul.c-dXWjRp > li:nth-child(1)')
             n+=1
