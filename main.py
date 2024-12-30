@@ -12,7 +12,7 @@ import time
 import random
 
 
-# إعدادات السائق
+# 
 def setup_driver():
     options = webdriver.ChromeOptions()
     options.add_argument("--headless=new")
@@ -28,7 +28,7 @@ def setup_driver():
     return driver
 
 
-# وظيفة لتسجيل الدخول
+#
 def login(driver, email, password):
     try:
         driver.get("https://app.ofppt-langues.ma/gw/api/saml/init?idp=https://sts.windows.net/dae54ad7-43df-47b7-ae86-4ac13ae567af/")
@@ -45,7 +45,7 @@ def login(driver, email, password):
         
 
 
-# وظيفة لإرسال مفتاح
+# 
 def send_key(driver, xpath, key):
     try:
         element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -55,7 +55,7 @@ def send_key(driver, xpath, key):
         print(f"Error in send_key: {e}")
 
 
-# وظيفة للنقر
+# 
 def click_element_with_mouse(driver, xpath):
     try:
         element = WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -86,7 +86,7 @@ def click_element_with_css_selector(driver, css_selector):
 
 
 
-# الوظيفة الرئيسية
+# 
 def main():
    
     driver = setup_driver()
@@ -127,6 +127,6 @@ def main():
         driver.quit()
 
 
-# بدء التنفيذ
+#
 if __name__ == "__main__":
     main()
