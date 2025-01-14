@@ -92,7 +92,7 @@ def main():
     driver = setup_driver()
     try:
         
-        login(driver, "2005090100281@ofppt-edu.ma", "G3nT!xR7w$8qL9M")
+        login(driver, "2007011600152@ofppt-edu.ma", "@9kL#2pZ!vW3T")
         time.sleep(15)
                
         n=0
